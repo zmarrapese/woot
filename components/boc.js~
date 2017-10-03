@@ -1,0 +1,6 @@
+AFRAME.registerComponent('boc', {
+    schema: {
+	type: string,
+	default: ''
+    }
+}
