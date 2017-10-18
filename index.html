@@ -1,16 +1,41 @@
+
+
+
 <html>
     <head>
 	<script src="https://aframe.io/releases/0.7.0/aframe.min.js"></script>
-	<script src="./components/boc-click-listener.js"></script>
+
+	<script src="https://rawgit.com/ngokevin/aframe-layout-component/master/dist/aframe-layout-component.min.js"></script>
+	<script src="https://rawgit.com/ngokevin/aframe-template-component/master/dist/aframe-template-component.min.js"></script>
+
+	<script src="./components/spawner.component.js"></script>
+	<script src="./components/click-listener.component.js"></script>
+	<script src="./components/projectile.component.js"></script>		
     </head>
     <body>
 	<a-scene>
-	    <a-box color="#BF8874" position="0 1 -4" rotation="0 20 0"  boc-click-listener>
-		<a-entity text="value: ?; color: #DE9C4E; height: 20; width: 20; align: center"  position="0 0 0.5"  ></a-entity>
-	    </a-box>
-	    <a-camera>
-		<a-cursor></a-cursor>
-	    </a-camera>
+	    <a-assets>
+		<img id="bullseye" src="./assets/target.png">
+		<script id="targets" type="text/x-nunjucks-template" >
+		 <a-entity layout="type: circle; radius: 5" position="0 2 0">
+		 <a-animation attribute="rotation" dur="20000" easing="linear" repeat="indefinite" to="0 360 0"></a-animation>
+		 {% for x in range(num) %}
+ 		 <a-image look-at="#wooter" src="#bullseye" transparent="true"></a-image>
+		 {% endfor %}
+		 </a-entity>
+		</script>
+
+		<a-mixin id="laser"
+			 geometry="primitive: cylinder; radius: 0.05; translate: 0 -2 0"
+			 material="color: green; metalness: 0.2; opacity: 0.4; roughness: 0.3"
+			 projectile="speed: -0.5"></a-mixin>		
+	    </a-assets>
+
+	    <a-entity template="src: #targets" data-num="10"></a-entity>
+
+	    <a-camera id="wooter" spawner="mixin: laser; on: click" click-listener position="0 1.8 0"></a-camera>
+
+	    <a-sky color="#252243"></a-sky>
 	</a-scene>
     </body>
 </html>
